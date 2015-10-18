@@ -14,13 +14,9 @@
 
 (defn- max-seq
   [i j s1 s2 cache]
-  (let [iter-key (make-key i j)
-        cached-val (iter-key @cache)]
-    (if cached-val
-      (do
-        (println (str "cach hit for " i ", " j "<<<"))
-        (flush)
-        cached-val)
+  (let [iter-key (make-key i j)]
+    (if-let [cached-val (iter-key @cache)]
+      cached-val
       (let [x       (first (drop i s1))
             y       (first (drop j s2))
             new-seq (if (or (nil? x) (nil? y))
