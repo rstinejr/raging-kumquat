@@ -1,6 +1,6 @@
-(ns max-seq.core-test
+(ns max-seq.mcs-test
   (:require [clojure.test :refer :all]
-            [max-seq.core :refer :all]))
+            [max-seq.mcs :refer [max-common]]))
 
 (deftest test-empties
   (testing "expect empty list"
