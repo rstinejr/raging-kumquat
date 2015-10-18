@@ -43,8 +43,7 @@
 
 (defn memoized 
   [s1 s2]
-  (let [lcs-func (memoize (partial lcs s1 s2))]
-    (vec (map str (lcs-memo s1 s2 0 0)))))
+  (vec (map str (lcs-memo s1 s2 0 0))))
 
 (defn- make-key
   [i j]
