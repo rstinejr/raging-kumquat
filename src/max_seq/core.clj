@@ -2,22 +2,22 @@
   (:require [clojure.pprint])
   (:gen-class))
 
-(def seq-cache (atom {}))
+(def ^:private seq-cache (atom {}))
 
-(def seq1 (atom []))
-(def seq2 (atom []))
+(def ^:private seq1 (atom []))
+(def ^:private seq2 (atom []))
 
-(defn make-key
+(defn- make-key
   [i j]
   (keyword (str i "-" j)))
 
-(defn longer-seq
+(defn- longer-seq
   [s1 s2]
   (if (>= (count s1)(count s2))
     s1
     s2))
 
-(defn max-seq
+(defn- max-seq
   [i j]
   (let [this-key (make-key i j)]
     (if-let [this-seq (this-key @seq-cache)]
