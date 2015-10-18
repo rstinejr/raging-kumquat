@@ -29,7 +29,7 @@
                     (longer-seq  
                       (if (not= x-i y-j) () (concat [x-i] (max-seq (inc i) (inc j))))
                       (longer-seq
-                        (max-seq i (inc j))
+                        (max-seq i       (inc j))
                         (max-seq (inc i) j))))]
         (swap! seq-cache assoc this-key commn)
         commn))))
@@ -38,7 +38,7 @@
   [arg1 arg2]
   (reset! seq1 (vec arg1))
   (reset! seq2 (vec arg2))
-  (max-seq 0 0))
+  (into [] (max-seq 0 0)))
 
 (defn -main
   "Take two strings as args."
@@ -49,6 +49,6 @@
 
   (let [seq1 (into [] (map str (seq (first  args))))
         seq2 (into [] (map str (seq (second args))))
-        comn (into [] (max-common seq1 seq2))]
+        comn (max-common seq1 seq2)]
 
     (println (str "max-common of '" seq1 "' and '" seq2 "': " comn))))
