@@ -1,17 +1,27 @@
 (ns max-seq.core
   (:gen-class))
 
-(def common-seqs (atom {}))
+(def seq-cache (atom {}))
 
 (def seq1 (atom []))
 (def seq2 (atom []))
 
+(defn make-key
+  [i j]
+  (keyword (str i "-" j)))
+
+(defn max-seq
+  [i j]
+  (let [this-key (make-key i j)]
+    (if-let [this-seq (this-key @seq-cache)]
+      this-seq
+      [ ])))
 
 (defn max-common
   [arg1 arg2]
   (reset! seq1 (vec arg1))
   (reset! seq2 (vec arg2))
-  [ ])
+  (max-seq 0 0))
 
 (defn -main
   "Take two strings as args."
