@@ -17,4 +17,6 @@
     (is (= ["c"] (max-common "c" "cd")))
     (is (= ["c"] (max-common "c" "dc")))))
 
-
+(deftest seq-tests
+  (testing "non-trival seqs"
+    (is (= ["a" "c" "b" "d" "a" "b" "a"] (max-common "ggabgcbdabaab" "bacdbadcaabba")))))
