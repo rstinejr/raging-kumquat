@@ -19,12 +19,9 @@
 
 (defn max-seq
   [i j]
-  (println (str "max-seq: " i ", " j " <<<<"))(flush)
   (let [this-key (make-key i j)]
     (if-let [this-seq (this-key @seq-cache)]
-      (do
-        (println "cache hit!")(flush)
-        this-seq)
+      this-seq
       (let [x-i   (first (drop i @seq1))
             y-j   (first (drop j @seq2))
             commn (if (or (nil? x-i) (nil? y-j))
@@ -34,7 +31,6 @@
                       (longer-seq
                         (max-seq i (inc j))
                         (max-seq (inc i) j))))]
-        (println (str "commn for " i ", " j ": " (into [] commn)))(flush)
         (swap! seq-cache assoc this-key commn)
         commn))))
         
@@ -42,8 +38,6 @@
   [arg1 arg2]
   (reset! seq1 (vec arg1))
   (reset! seq2 (vec arg2))
-  (println "seq1:" @seq1)
-  (println "seq2:" @seq2)
   (max-seq 0 0))
 
 (defn -main
@@ -57,8 +51,4 @@
         seq2 (into [] (map str (seq (second args))))
         comn (into [] (max-common seq1 seq2))]
 
-
-    (println "seq-cache:")
-    (clojure.pprint/pprint @seq-cache)
-            
     (println (str "max-common of '" seq1 "' and '" seq2 "': " comn))))
