@@ -27,10 +27,24 @@
   (vec (map str (lcs s1 s2 0 0))))
 
 
+(def lcs-memo
+  (memoize
+    (fn [s1 s2 i j]
+      (println (str "lcs-memo " i ", " j " <<<"))(flush)
+        (let [x       (first (drop i s1))
+              y       (first (drop j s2))]
+          (if (or (nil? x) (nil? y))
+          ()
+          (longer-seq
+            (if (not= x y) () (concat [x] (lcs-memo s1 s2 (inc i) (inc j))))
+            (longer-seq
+              (lcs-memo s1 s2 i       (inc j))
+              (lcs-memo s1 s2 (inc i) j     ))))))))
+
 (defn memoized 
   [s1 s2]
   (let [lcs-func (memoize (partial lcs s1 s2))]
-    (vec (map str (lcs-func 0 0)))))
+    (vec (map str (lcs-memo s1 s2 0 0)))))
 
 (defn- make-key
   [i j]
