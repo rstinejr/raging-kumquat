@@ -10,22 +10,22 @@
 (defn- lcs
   "Recursive algorithm to find longest common sequence."
   [s1 s2 i j]
+  (println (str "lcs " i ", " j " <<<"))(flush)
   (let [x       (first (drop i s1))
-        y       (first (drop j s2))
-        new-seq (if (or (nil? x) (nil? y))
-                  ()
-                  (longer-seq
-                    (if (not= x y) () (concat [x] (lcs s1 s2 (inc i) (inc j))))
-                    (longer-seq
-                      (lcs s1 s2 i       (inc j))
-                      (lcs s1 s2 (inc i) j     ))))]
-    (println (str "lcs " i ", " j " <<<"))(flush)
-    new-seq))
+        y       (first (drop j s2))]
+    (if (or (nil? x) (nil? y))
+      ()
+      (longer-seq
+        (if (not= x y) () (concat [x] (lcs s1 s2 (inc i) (inc j))))
+        (longer-seq
+          (lcs s1 s2 i       (inc j))
+          (lcs s1 s2 (inc i) j     ))))))
 
 (defn no-memo
   "No memoization. Just wrap recursive lcs."
   [s1 s2]
   (vec (map str (lcs s1 s2 0 0))))
+
 
 (defn memoized 
   [s1 s2]
