@@ -35,20 +35,19 @@
         commn))))
         
 (defn max-common
-  [arg1 arg2]
-  (reset! seq1 (vec arg1))
-  (reset! seq2 (vec arg2))
-  (into [] (max-seq 0 0)))
+  [& args]
+  (when (not= 2 (count args))
+    (throw (ex-info (str "Need exactly two sequences to compare.") {:causes #{:bad-args}})))
+
+  (println "args" args)(flush)
+  (let [s1 (map str (seq (first  args)))
+        s2 (map str (seq (second args)))]
+    (reset! seq1 s1)
+    (reset! seq2 s2)
+    (into [] (max-seq 0 0))))
 
 (defn -main
   "Take two strings as args."
   [& args]
-
-  (when (not= 2 (count args))
-    (throw (ex-info (str "Need exactly two sequences to compare.") {:causes #{:bad-args}})))
-
-  (let [seq1 (into [] (map str (seq (first  args))))
-        seq2 (into [] (map str (seq (second args))))
-        comn (max-common seq1 seq2)]
-
-    (println (str "max-common of '" seq1 "' and '" seq2 "': " comn))))
+  (let [comn (into [] (max-common (first args) (second args)))]
+    (println (str "max-common of '" (first args) "' and '" (second args) "': " comn))))
