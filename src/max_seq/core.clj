@@ -22,7 +22,9 @@
   (println (str "max-seq: " i ", " j " <<<<"))(flush)
   (let [this-key (make-key i j)]
     (if-let [this-seq (this-key @seq-cache)]
-      this-seq
+      (do
+        (println "cache hit!")(flush)
+        this-seq)
       (let [x-i   (first (drop i @seq1))
             y-j   (first (drop j @seq2))
             commn (if (or (nil? x-i) (nil? y-j))
@@ -32,7 +34,7 @@
                       (longer-seq
                         (max-seq i (inc j))
                         (max-seq (inc i) j))))]
-        (println (str "commn for " i ", " j ": " commn))(flush)
+        (println (str "commn for " i ", " j ": " (into [] commn)))(flush)
         (swap! seq-cache assoc this-key commn)
         commn))))
         
