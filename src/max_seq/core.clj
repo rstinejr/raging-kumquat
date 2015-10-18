@@ -1,4 +1,5 @@
 (ns max-seq.core
+  (:require [clojure.pprint])
   (:gen-class))
 
 (def seq-cache (atom {}))
@@ -18,7 +19,7 @@
 
 (defn max-seq
   [i j]
-  (println (str "max-seq: " i ", " j))(flush)
+  (println (str "max-seq: " i ", " j " <<<<"))(flush)
   (let [this-key (make-key i j)]
     (if-let [this-seq (this-key @seq-cache)]
       this-seq
@@ -27,11 +28,11 @@
             commn (if (or (nil? x-i) (nil? y-j))
                     ()
                     (longer-seq  
-                      (if (not= x-i y-j) () (concat '(x-i) (max-seq (inc i) (inc j))))
+                      (if (not= x-i y-j) () (concat [x-i] (max-seq (inc i) (inc j))))
                       (longer-seq
                         (max-seq i (inc j))
                         (max-seq (inc i) j))))]
-        (printf (str "commn for " i ", " j ": " commn))(flush)
+        (println (str "commn for " i ", " j ": " commn))(flush)
         (swap! seq-cache assoc this-key commn)
         commn))))
         
@@ -39,13 +40,23 @@
   [arg1 arg2]
   (reset! seq1 (vec arg1))
   (reset! seq2 (vec arg2))
+  (println "seq1:" @seq1)
+  (println "seq2:" @seq2)
   (max-seq 0 0))
 
 (defn -main
   "Take two strings as args."
   [& args]
+
   (when (not= 2 (count args))
     (throw (ex-info (str "Need exactly two sequences to compare.") {:causes #{:bad-args}})))
+
   (let [seq1 (into [] (map str (seq (first  args))))
-        seq2 (into [] (map str (seq (second args))))]
-  (println (str "max-common of '" seq1 "' and '" seq2 "': " (max-common seq1 seq2)))))
+        seq2 (into [] (map str (seq (second args))))
+        comn (into [] (max-common seq1 seq2))]
+
+
+    (println "seq-cache:")
+    (clojure.pprint/pprint @seq-cache)
+            
+    (println (str "max-common of '" seq1 "' and '" seq2 "': " comn))))
