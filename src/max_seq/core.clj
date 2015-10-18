@@ -5,5 +5,5 @@
 (defn -main
   "Take two strings as args."
   [& args]
-  (let [comn (lcs/max-common (first args) (second args))]
+  (let [comn (lcs/explicit-memo (first args) (second args))]
     (println (str "max-common of '" (first args) "' and '" (second args) "': " comn))))

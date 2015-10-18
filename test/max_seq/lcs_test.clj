@@ -1,6 +1,6 @@
 (ns max-seq.lcs-test
   (:require [clojure.test :refer :all]
-            [max-seq.lcs :refer [explicit-memo]]))
+            [max-seq.lcs :refer [explicit-memo no-memo]]))
 
 (deftest test-empties
   (testing "expect empty list"
@@ -17,6 +17,10 @@
     (is (= ["c"] (explicit-memo "c" "cd")))
     (is (= ["c"] (explicit-memo "c" "dc")))))
 
-(deftest seq-tests
+(deftest explicit-memo-test
   (testing "non-trival seqs"
     (is (= ["a" "c" "b" "d" "a" "b" "a"] (explicit-memo "ggabgcbdabaab" "bacdbadcaabba")))))
+
+(deftest no-memo-test
+  (testing "non-trival seqs"
+    (is (= ["a" "c" "b"] (no-memo "ggacb" "badcdb")))))
