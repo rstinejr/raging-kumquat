@@ -18,21 +18,22 @@
     s2))
 
 (defn- max-seq
-  [i j]
+  [i j s1 s2]
   (let [this-key (make-key i j)]
-    (if-let [this-seq (this-key @seq-cache)]
-      this-seq
-      (let [x-i   (first (drop i @seq1))
-            y-j   (first (drop j @seq2))
+    ;;(if-let [this-seq (this-key @seq-cache)]
+      ;;this-seq
+      (let [x-i   (first (drop i s1))
+            y-j   (first (drop j s2))
             commn (if (or (nil? x-i) (nil? y-j))
                     ()
                     (longer-seq  
-                      (if (not= x-i y-j) () (concat [x-i] (max-seq (inc i) (inc j))))
+                      (if (not= x-i y-j) () (concat [x-i] (max-seq (inc i) (inc j) s1 s2)))
                       (longer-seq
-                        (max-seq i       (inc j))
-                        (max-seq (inc i) j))))]
-        (swap! seq-cache assoc this-key commn)
-        commn))))
+                        (max-seq i       (inc j) s1 s2)
+                        (max-seq (inc i) j       s1 s2))))]
+        ;;(swap! seq-cache assoc this-key commn)
+        commn)))
+;;)
         
 (defn max-common
   [& args]
@@ -42,9 +43,7 @@
   (println "args" args)(flush)
   (let [s1 (map str (seq (first  args)))
         s2 (map str (seq (second args)))]
-    (reset! seq1 s1)
-    (reset! seq2 s2)
-    (into [] (max-seq 0 0))))
+    (into [] ((memoize max-seq) 0 0 s1 s2))))
 
 (defn -main
   "Take two strings as args."
