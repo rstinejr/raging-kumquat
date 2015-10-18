@@ -7,23 +7,25 @@
     s1
     s2))
 
-(defn no-memo
-  "Recursive algorithm to find longest common sequence.
-  No memoization, explicit neiter exlicit nor by memoize."
-  ([s1 s2]
-   (vec (map str (no-memo s1 s2 0 0))))
-  ([s1 s2 i j]
+(defn- lcs
+  "Recursive algorithm to find longest common sequence."
+  [s1 s2 i j]
   (let [x       (first (drop i s1))
         y       (first (drop j s2))
         new-seq (if (or (nil? x) (nil? y))
                   ()
                   (longer-seq
-                    (if (not= x y) () (concat [x] (no-memo s1 s2 (inc i) (inc j))))
+                    (if (not= x y) () (concat [x] (lcs s1 s2 (inc i) (inc j))))
                     (longer-seq
-                      (no-memo s1 s2 i       (inc j))
-                      (no-memo s1 s2 (inc i) j     ))))]
-    (println (str "no-memo " i ", " j " <<<"))(flush)
-    new-seq)))
+                      (lcs s1 s2 i       (inc j))
+                      (lcs s1 s2 (inc i) j     ))))]
+    (println (str "lcs " i ", " j " <<<"))(flush)
+    new-seq))
+
+(defn no-memo
+  "No memoization. Just wrap recursive lcs."
+  [s1 s2]
+  (vec (map str (lcs s1 s2 0 0))))
 
 (defn- make-key
   [i j]
