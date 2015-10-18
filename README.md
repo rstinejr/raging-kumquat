@@ -9,7 +9,10 @@ This project assumes you have leiningen and Clojure installed.
 Start by cloning the project.  To test, cd to *raging-kumquat* and enter ```lein test```. 
 
 To see comparative results of the three approaches to the algorithm, enter
-```lein run "ababgdcddca" "gdcabcdgccab"`
+
+```
+lein run "ababgdcddca" "gdcabcdgccab"
+```
 
 ## Dynamic Programming and Memoization
 
