@@ -1,22 +1,22 @@
 (ns max-seq.lcs-test
   (:require [clojure.test :refer :all]
-            [max-seq.lcs :refer [max-common]]))
+            [max-seq.lcs :refer [explicit-memo]]))
 
 (deftest test-empties
   (testing "expect empty list"
-    (is (= () (max-common "" "")))
-    (is (= () (max-common "" "abcd")))
-    (is (= () (max-common "defz" "")))
-    (is (= () (max-common "a" "b")))))
+    (is (= () (explicit-memo "" "")))
+    (is (= () (explicit-memo "" "abcd")))
+    (is (= () (explicit-memo "defz" "")))
+    (is (= () (explicit-memo "a" "b")))))
 
 (deftest short-strings
   (testing "expect singletons"
-    (is (= ["a"] (max-common "ab" "a")))
-    (is (= ["b"] (max-common "b"  "b")))
-    (is (= ["a"] (max-common "ba" "a")))
-    (is (= ["c"] (max-common "c" "cd")))
-    (is (= ["c"] (max-common "c" "dc")))))
+    (is (= ["a"] (explicit-memo "ab" "a")))
+    (is (= ["b"] (explicit-memo "b"  "b")))
+    (is (= ["a"] (explicit-memo "ba" "a")))
+    (is (= ["c"] (explicit-memo "c" "cd")))
+    (is (= ["c"] (explicit-memo "c" "dc")))))
 
 (deftest seq-tests
   (testing "non-trival seqs"
-    (is (= ["a" "c" "b" "d" "a" "b" "a"] (max-common "ggabgcbdabaab" "bacdbadcaabba")))))
+    (is (= ["a" "c" "b" "d" "a" "b" "a"] (explicit-memo "ggabgcbdabaab" "bacdbadcaabba")))))

@@ -25,10 +25,11 @@
                         (longer-seq
                           (max-seq i       (inc j) s1 s2 cache)
                           (max-seq (inc i) j       s1 s2 cache))))]
+        (println (str "calculated " i ", " j " <<<"))(flush)
         (swap! cache assoc iter-key new-seq)
         new-seq))))
         
-(defn max-common
+(defn explicit-memo
   [& args]
   (when (not= 2 (count args))
     (throw (ex-info (str "Need exactly two sequences to compare.") {:causes #{:bad-args}})))
