@@ -2,6 +2,8 @@
   (:require [clojure.test :refer :all]
             [max-seq.core :refer :all]))
 
-(deftest a-test
-  (testing "FIXME, I fail."
-    (is (= 0 1))))
+(deftest test-some-matches
+  (testing "empty lists"
+    (is (= () (max-common () ())))
+    (is (= () (max-common () '("a" "b" "c"))))
+    (is (= () (max-common ["d" "e" "f" "z"] ())))))
