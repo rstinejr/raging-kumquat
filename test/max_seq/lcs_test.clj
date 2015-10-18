@@ -1,6 +1,6 @@
-(ns max-seq.mcs-test
+(ns max-seq.lcs-test
   (:require [clojure.test :refer :all]
-            [max-seq.mcs :refer [max-common]]))
+            [max-seq.lcs :refer [max-common]]))
 
 (deftest test-empties
   (testing "expect empty list"
@@ -16,3 +16,5 @@
     (is (= ["a"] (max-common "ba" "a")))
     (is (= ["c"] (max-common "c" "cd")))
     (is (= ["c"] (max-common "c" "dc")))))
+
+

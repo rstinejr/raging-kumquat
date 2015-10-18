@@ -1,4 +1,4 @@
-(ns max-seq.mcs
+(ns max-seq.lcs
   (:require [clojure.pprint]))
 
 (defn- longer-seq
