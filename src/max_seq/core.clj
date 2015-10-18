@@ -10,5 +10,5 @@
     (let [s1 (first  args)
           s2 (second args)]
       (println (str "LCS of '" s1 "' and '" s2 "':"))
-      (println (str "explicit memoization: " (lcs/explicit-memo s1 s2)))
-      (println (str "memoized            : " (lcs/memoized s1 s2))))))
+      (println (str "explicit memoization: " (time (lcs/explicit-memo s1 s2))))
+      (println (str "internally memoized : " (time (lcs/memoized s1 s2)))))))
