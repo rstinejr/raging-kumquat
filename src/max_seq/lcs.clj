@@ -10,9 +10,8 @@
 (defn- lcs
   "Recursive algorithm to find longest common sequence."
   [s1 s2 i j]
-  (println (str "lcs " i ", " j " <<<"))(flush)
-  (let [x       (first (drop i s1))
-        y       (first (drop j s2))]
+  (let [x (first (drop i s1))
+        y (first (drop j s2))]
     (if (or (nil? x) (nil? y))
       ()
       (longer-seq
@@ -30,16 +29,15 @@
 (def lcs-memo
   (memoize
     (fn [s1 s2 i j]
-      (println (str "lcs-memo " i ", " j " <<<"))(flush)
-        (let [x       (first (drop i s1))
-              y       (first (drop j s2))]
+        (let [x (first (drop i s1))
+              y (first (drop j s2))]
           (if (or (nil? x) (nil? y))
           ()
           (longer-seq
             (if (not= x y) () (concat [x] (lcs-memo s1 s2 (inc i) (inc j))))
             (longer-seq
               (lcs-memo s1 s2 i       (inc j))
-              (lcs-memo s1 s2 (inc i) j     ))))))))
+              (lcs-memo s1 s2 (inc i) j      ))))))))
 
 (defn memoized 
   [s1 s2]
@@ -64,10 +62,8 @@
                         (longer-seq
                           (max-seq i       (inc j) s1 s2 cache)
                           (max-seq (inc i) j       s1 s2 cache))))]
-        (println (str "calculated " i ", " j " <<<"))(flush)
         (swap! cache assoc iter-key new-seq)
         new-seq))))
-        
         
 (defn explicit-memo
   [& args]
