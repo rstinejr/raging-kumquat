@@ -8,40 +8,28 @@
     s2))
 
 (defn- lcs
-  "Recursive algorithm to find longest common sequence."
-  [s1 s2 i j]
+  "Recursive algorithm to find longest common sequence.
+   Memoize if optional key :memoize is truthy."
+  [s1 s2 i j recurse-fn]
   (let [x (first (drop i s1))
         y (first (drop j s2))]
     (if (or (nil? x) (nil? y))
       ()
       (longer-seq
-        (if (not= x y) () (concat [x] (lcs s1 s2 (inc i) (inc j))))
+        (if (not= x y) () (concat [x] (recurse-fn s1 s2 (inc i) (inc j) recurse-fn)))
         (longer-seq
-          (lcs s1 s2 i       (inc j))
-          (lcs s1 s2 (inc i) j     ))))))
+          (recurse-fn s1 s2 i       (inc j) recurse-fn)
+          (recurse-fn s1 s2 (inc i) j       recurse-fn))))))
 
-(defn no-memo
+(defn lcs-no-memo
   "No memoization. Just wrap recursive lcs."
   [s1 s2]
-  (vec (map str (lcs s1 s2 0 0))))
+  (vec (map str (lcs s1 s2 0 0 lcs))))
 
 
-(def lcs-memo
-  (memoize
-    (fn [s1 s2 i j]
-        (let [x (first (drop i s1))
-              y (first (drop j s2))]
-          (if (or (nil? x) (nil? y))
-          ()
-          (longer-seq
-            (if (not= x y) () (concat [x] (lcs-memo s1 s2 (inc i) (inc j))))
-            (longer-seq
-              (lcs-memo s1 s2 i       (inc j))
-              (lcs-memo s1 s2 (inc i) j      ))))))))
-
-(defn memoized 
+(defn lcs-memo
   [s1 s2]
-  (vec (map str (lcs-memo s1 s2 0 0))))
+  (vec (map str (lcs s1 s2 0 0 (memoize lcs)))))
 
 (defn- make-key
   [i j]
@@ -65,10 +53,12 @@
         (swap! cache assoc iter-key new-seq)
         new-seq))))
         
-(defn explicit-memo
+(defn lcs-explicit-memo
+  "Dynamic programming solution to longest-common-subsequence.
+  Uses explicit memoization -- keep previously computed answers in a cache."
   [& args]
   (when (not= 2 (count args))
     (throw (ex-info (str "Need exactly two sequences to compare.") {:causes #{:bad-args}})))
   (let [s1 (map str (seq (first  args)))
         s2 (map str (seq (second args)))]
-    (into [] ((memoize max-seq) 0 0 s1 s2 (atom {})))))
+    (into [] (max-seq 0 0 s1 s2 (atom {})))))
